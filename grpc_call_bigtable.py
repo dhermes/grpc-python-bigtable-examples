@@ -21,7 +21,7 @@ ACCESS_TOKEN = SCOPED_CREDENTIALS.get_access_token().access_token
 del CREDENTIALS
 del SCOPED_CREDENTIALS
 AUTH_HEADER = 'Bearer ' + ACCESS_TOKEN
-TIMEOUT_SECONDS = 2
+TIMEOUT_SECONDS = 10
 HOST = 'bigtabletableadmin.googleapis.com'
 PORT = 443
 with open(SSL_CERT_FILE, mode='rb') as file_obj:
