@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from oauth2client.client import _get_application_default_credential_from_file
 
@@ -38,7 +39,19 @@ stub = STUB_CLASS(HOST, PORT,
                   private_key=None,
                   certificate_chain=None,
                   server_host_override=None)
+request_pb = bigtable_cluster_service_messages_pb2.ListZonesRequest(
+    name='projects/' + PROJECT_ID)
 with stub:
-    request_pb = bigtable_cluster_service_messages_pb2.ListZonesRequest(
-        name='projects/' + PROJECT_ID)
-    response = stub.ListZones(request_pb, TIMEOUT_SECONDS)
+    response = stub.ListZones.async(request_pb, TIMEOUT_SECONDS)
+
+print('response.running():')
+print(response.running())
+print('response.done():')
+print(response.done())
+print('response.cancelled():')
+print(response.cancelled())
+print('response.exception():')
+print(response.exception())
+tb = response.traceback()
+traceback.print_tb(tb)
+response.result()
