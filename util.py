@@ -142,3 +142,21 @@ def get_certs():
 def custom_metadata_transformer(ignored_val):
     """Adds authorization header to request metadata."""
     return [('Authorization', 'Bearer ' + get_token())]
+
+
+def make_cluster_stub():
+    """Makes a stub for the Cluster Admin API."""
+    return CLUSTER_STUB_FACTORY(
+        CLUSTER_ADMIN_HOST, PORT,
+        metadata_transformer=custom_metadata_transformer,
+        secure=True,
+        root_certificates=get_certs())
+
+
+def make_table_stub():
+    """Makes a stub for the Table Admin API."""
+    return TABLE_STUB_FACTORY(
+        TABLE_ADMIN_HOST, PORT,
+        metadata_transformer=custom_metadata_transformer,
+        secure=True,
+        root_certificates=get_certs())

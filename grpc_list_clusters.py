@@ -11,21 +11,13 @@ from gcloud_bigtable._generated import bigtable_cluster_service_messages_pb2
 
 from config import PROJECT_ID
 from config import TIMEOUT_SECONDS
-from util import PORT
-from util import CLUSTER_ADMIN_HOST as HOST
-from util import CLUSTER_STUB_FACTORY as STUB_FACTORY
-from util import custom_metadata_transformer
-from util import get_certs
+from util import make_cluster_stub
 from util import protobuf_to_dict
 
 
 def main():
     """Main function for executing script."""
-    stub = STUB_FACTORY(HOST, PORT,
-                        metadata_transformer=custom_metadata_transformer,
-                        secure=True,
-                        root_certificates=get_certs())
-
+    stub = make_cluster_stub()
     project_name = 'projects/%s' % (PROJECT_ID,)
     request_pb = bigtable_cluster_service_messages_pb2.ListClustersRequest(
         name=project_name)

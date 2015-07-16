@@ -13,21 +13,13 @@ from config import CLUSTER
 from config import PROJECT_ID
 from config import TIMEOUT_SECONDS
 from config import ZONE
-from util import PORT
-from util import TABLE_ADMIN_HOST as HOST
-from util import TABLE_STUB_FACTORY as STUB_FACTORY
-from util import custom_metadata_transformer
-from util import get_certs
+from util import make_table_stub
 from util import protobuf_to_dict
 
 
 def main():
     """Main function for executing script."""
-    stub = STUB_FACTORY(HOST, PORT,
-                        metadata_transformer=custom_metadata_transformer,
-                        secure=True,
-                        root_certificates=get_certs())
-
+    stub = make_table_stub()
     table_name = 'projects/%s/zones/%s/clusters/%s' % (
         PROJECT_ID, ZONE, CLUSTER)
     request_pb = bigtable_table_service_messages_pb2.ListTablesRequest(
