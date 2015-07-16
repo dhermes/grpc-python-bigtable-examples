@@ -1,6 +1,6 @@
 """Using gRPC to test gcloud-python-bigtable.
 
-In this script, we use the Cluster Admin API to list clusters.
+In this script, we use the Cluster Admin API to list zones.
 """
 
 from __future__ import print_function
@@ -34,11 +34,11 @@ stub = STUB_FACTORY(HOST, PORT,
                     root_certificates=get_certs())
 
 project_name = 'projects/%s' % (PROJECT_ID,)
-request_pb = bigtable_cluster_service_messages_pb2.ListClustersRequest(
+request_pb = bigtable_cluster_service_messages_pb2.ListZonesRequest(
     name=project_name)
 result_pb = None
 with stub:
-    response = stub.ListClusters.async(request_pb, TIMEOUT_SECONDS)
+    response = stub.ListZones.async(request_pb, TIMEOUT_SECONDS)
     result_pb = response.result()
 
 print('result type:')

@@ -1,9 +1,18 @@
+"""Using gRPC to test gcloud-python-bigtable.
+
+In this script, we use the Cluster Admin API to list zones.
+
+Rather than using a stub to send requests, we use the low-level
+gRPC API to form requests.
+"""
+
+from __future__ import print_function
+
 import time
 
 import grpc._adapter._intermediary_low as low_level
 
 from gcloud_bigtable._generated import bigtable_cluster_service_messages_pb2
-from gcloud_bigtable._generated import bigtable_cluster_service_pb2
 
 from config import PROJECT_ID
 from config import TIMEOUT_SECONDS
@@ -13,8 +22,6 @@ from util import get_certs
 from util import get_token
 
 
-STUB_FACTORY = (bigtable_cluster_service_pb2.
-                early_adopter_create_BigtableClusterService_stub)
 EVENT_DICT = {}
 HOST_PORT = '%s:%d' % (HOST, PORT)
 PROJECT_NAME = 'projects/%s' % (PROJECT_ID,)

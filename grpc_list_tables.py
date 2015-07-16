@@ -1,5 +1,11 @@
+"""Using gRPC to test gcloud-python-bigtable.
+
+In this script, we use the Table Admin API to list tables in a cluster.
+"""
+
+from __future__ import print_function
+
 import json
-import os
 
 from gcloud_bigtable._generated import bigtable_table_service_messages_pb2
 from gcloud_bigtable._generated import bigtable_table_service_pb2
@@ -20,6 +26,7 @@ STUB_FACTORY = (bigtable_table_service_pb2.
 
 
 def custom_metadata_transformer(ignored_val):
+    """Adds authorization header to request metadata."""
     return [('Authorization', 'Bearer ' + get_token())]
 
 
