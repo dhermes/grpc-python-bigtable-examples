@@ -36,14 +36,52 @@ make run_table
 This will need to be a cluster you have created (see
 "Creating a Cluster in the UI" below).
 
-For the `make` targets which run samples, you can also set
-`VERBOSE=True`, e.g.
+**NOTE**: For the `make` targets which run samples, you can
+also set `VERBOSE=True`, e.g.
 
 ```bash
 make run_table VERBOSE=True
 ```
 
 to produce much more debug logging behavior.
+
+## Quirky Error Messages
+
+We've [noticed][10] that the Cluster Admin API does not
+work for service accounts, but does work for user
+accounts.
+
+When running `make run_cluster` with the gRPC Python client
+(using a service account) we don't get much information
+
+```python
+D0716 11:10:42.451769588   10866 frame_settings.c:230]       adding 983041 for initial_window change
+Traceback (most recent call last):
+  File "grpc_list_clusters.py", line 35, in <module>
+    result_pb = response.result()
+  File "/usr/local/lib/python2.7/dist-packages/grpc/framework/alpha/_reexport.py", line 96, in result
+    raise _reexport_error(e)
+grpc.framework.alpha.exceptions.ExpirationError
+```
+
+When [running][9] the same request with the gRPC golang client (via
+`make run_cluster` in that gist), the error produced is
+
+```
+2015/07/16 11:07:56 rpc error: code = 7 desc = "Project has not enabled the API. Please use Google Developers Console to activate the API for your project."
+```
+
+This is also produced when [using][10] the BigTable JSON API
+
+```json
+{
+  "error": {
+    "code": 403,
+    "message": "Project has not enabled the API. Please use Google Developers Console to activate the API for your project.",
+    "status": "PERMISSION_DENIED",
+    ...
+}
+```
 
 ## Installing Dependencies
 
@@ -160,3 +198,5 @@ pulls this from `config.py.sample`
 [6]: https://pip.pypa.io/en/latest/installing.html
 [7]: http://docs.python-guide.org/en/latest/dev/virtualenvs/
 [8]: https://cloud.google.com/sdk/gcloud/
+[9]: https://gist.github.com/dhermes/d27070c90a9862213a3b
+[10]: https://github.com/GoogleCloudPlatform/gcloud-python/issues/872#issuecomment-121793405
