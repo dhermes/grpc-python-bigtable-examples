@@ -130,3 +130,8 @@ def get_certs():
     """
     set_certs(reset=False)
     return AuthInfo.ROOT_CERTIFICATES
+
+
+def custom_metadata_transformer(ignored_val):
+    """Adds authorization header to request metadata."""
+    return [('Authorization', 'Bearer ' + get_token())]

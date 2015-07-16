@@ -14,18 +14,13 @@ from config import PROJECT_ID
 from config import TIMEOUT_SECONDS
 from util import PORT
 from util import CLUSTER_ADMIN_HOST as HOST
+from util import custom_metadata_transformer
 from util import get_certs
-from util import get_token
 from util import protobuf_to_dict
 
 
 STUB_FACTORY = (bigtable_cluster_service_pb2.
                 early_adopter_create_BigtableClusterService_stub)
-
-
-def custom_metadata_transformer(ignored_val):
-    """Adds authorization header to request metadata."""
-    return [('Authorization', 'Bearer ' + get_token())]
 
 
 stub = STUB_FACTORY(HOST, PORT,
