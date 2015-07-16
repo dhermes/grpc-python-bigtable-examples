@@ -9,7 +9,7 @@ add `brew` to `${PATH}` as instructed.)
 To list clusters run
 
 ```bash
-make run_cluster
+make list_clusters
 ```
 
 This consistently fails (at least with a service account). If
@@ -24,23 +24,34 @@ using the [`gcloud` CLI tool][8]. After doing this, you can
 use that token by adding a flag to the `make` command:
 
 ```bash
-make run_cluster USE_APP_DEFAULT=True
+make list_clusters USE_APP_DEFAULT=True
 ```
 
 To list tables in a cluster
 
 ```bash
-make run_table
+make list_tables
 ```
 
 This will need to be a cluster you have created (see
 "Creating a Cluster in the UI" below).
 
+To list zones available to a project (via the Cluster Admin API)
+
+```bash
+make list_zones_low_level
+```
+
+This uses the low-level gRPC API rather than a generated service stub.
+It was created with [@nathanielmanistaatgoogle][11] while
+debugging the service. Currently, it fails with a deadline exceeded
+using both a service account (expected) and a user account.
+
 **NOTE**: For the `make` targets which run samples, you can
 also set `VERBOSE=True`, e.g.
 
 ```bash
-make run_table VERBOSE=True
+make list_tables VERBOSE=True
 ```
 
 to produce much more debug logging behavior.
@@ -51,7 +62,7 @@ We've [noticed][10] that the Cluster Admin API does not
 work for service accounts, but does work for user
 accounts.
 
-When running `make run_cluster` with the gRPC Python client
+When running `make list_clusters` with the gRPC Python client
 (using a service account) we don't get much information
 
 ```python
@@ -200,3 +211,4 @@ pulls this from `config.py.sample`
 [8]: https://cloud.google.com/sdk/gcloud/
 [9]: https://gist.github.com/dhermes/d27070c90a9862213a3b
 [10]: https://github.com/GoogleCloudPlatform/gcloud-python/issues/872#issuecomment-121793405
+[11]: https://github.com/nathanielmanistaatgoogle
