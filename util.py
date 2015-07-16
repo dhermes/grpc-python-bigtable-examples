@@ -14,9 +14,11 @@ from gcloud_bigtable._generated import bigtable_cluster_service_pb2
 from gcloud_bigtable._generated import bigtable_table_service_messages_pb2
 from gcloud_bigtable._generated import bigtable_table_service_pb2
 
+from config import CLUSTER
 from config import KEYFILE_PATH
 from config import PROJECT_ID
 from config import TIMEOUT_SECONDS
+from config import ZONE
 
 
 BASE_SCOPE = 'https://www.googleapis.com/auth/cloud-bigtable.data'
@@ -168,7 +170,8 @@ def make_table_stub():
 
 
 def _make_api_request(method, messages_module, make_stub_method,
-                      request_name, timeout_seconds):
+                      request_name, timeout_seconds,
+                      pretty_print=False):
     """Make a gRPC request for ``method`` to a service."""
     request_attr = '%sRequest' % (method,)
     request_pb_class = getattr(
@@ -183,22 +186,35 @@ def _make_api_request(method, messages_module, make_stub_method,
         response = request_obj.async(request_pb, timeout_seconds)
         result_pb = response.result()
 
+    if pretty_print:
+        pretty_print_result(result_pb)
     return result_pb
 
 
 def make_cluster_request(method, project_id=PROJECT_ID,
-                         timeout_seconds=TIMEOUT_SECONDS):
+                         timeout_seconds=TIMEOUT_SECONDS,
+                         pretty_print=False):
     """Make a gRPC request for ``method`` to the Cluster Admin API."""
     project_name = 'projects/%s' % (project_id,)
     return _make_api_request(method, bigtable_cluster_service_messages_pb2,
-                             make_cluster_stub, project_name, timeout_seconds)
+                             make_cluster_stub, project_name, timeout_seconds,
+                             pretty_print=pretty_print)
 
 
-def pretty_print_cluster_result(method, project_id=PROJECT_ID,
-                                timeout_seconds=TIMEOUT_SECONDS):
-    """Pretty print a gRPC response for ``method`` to the Cluster Admin API."""
-    result_pb = make_cluster_request(method, project_id=project_id,
-                                     timeout_seconds=timeout_seconds)
+def make_table_request(method, project_id=PROJECT_ID, zone=ZONE,
+                       cluster=CLUSTER,
+                       timeout_seconds=TIMEOUT_SECONDS,
+                       pretty_print=False):
+    """Make a gRPC request for ``method`` to the Table Admin API."""
+    table_name = 'projects/%s/zones/%s/clusters/%s' % (
+        project_id, zone, cluster)
+    return _make_api_request(method, bigtable_table_service_messages_pb2,
+                             make_table_stub, table_name, timeout_seconds,
+                             pretty_print=pretty_print)
+
+
+def pretty_print_result(result_pb):
+    """Pretty print a protobuf result."""
     print('result type:')
     print(type(result_pb).__name__)
     print('result:')
