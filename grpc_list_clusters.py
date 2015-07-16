@@ -8,19 +8,15 @@ from __future__ import print_function
 import json
 
 from gcloud_bigtable._generated import bigtable_cluster_service_messages_pb2
-from gcloud_bigtable._generated import bigtable_cluster_service_pb2
 
 from config import PROJECT_ID
 from config import TIMEOUT_SECONDS
 from util import PORT
 from util import CLUSTER_ADMIN_HOST as HOST
+from util import CLUSTER_STUB_FACTORY as STUB_FACTORY
 from util import custom_metadata_transformer
 from util import get_certs
 from util import protobuf_to_dict
-
-
-STUB_FACTORY = (bigtable_cluster_service_pb2.
-                early_adopter_create_BigtableClusterService_stub)
 
 
 def main():

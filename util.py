@@ -8,6 +8,9 @@ from google.protobuf import internal
 from oauth2client.client import GoogleCredentials
 from oauth2client.client import _get_application_default_credential_from_file
 
+from gcloud_bigtable._generated import bigtable_cluster_service_pb2
+from gcloud_bigtable._generated import bigtable_table_service_pb2
+
 from config import KEYFILE_PATH
 
 
@@ -19,6 +22,10 @@ SSL_CERT_FILE = '/etc/ssl/certs/ca-certificates.crt'
 PORT = 443
 TABLE_ADMIN_HOST = 'bigtabletableadmin.googleapis.com'
 CLUSTER_ADMIN_HOST = 'bigtableclusteradmin.googleapis.com'
+TABLE_STUB_FACTORY = (bigtable_table_service_pb2.
+                      early_adopter_create_BigtableTableService_stub)
+CLUSTER_STUB_FACTORY = (bigtable_cluster_service_pb2.
+                        early_adopter_create_BigtableClusterService_stub)
 _BASE_TYPES = (bool, int, long, float, bytes, unicode,
                list, tuple, type(None))
 
