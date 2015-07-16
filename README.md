@@ -39,6 +39,15 @@ This will need to be a cluster you have created (see
 To list zones available to a project (via the Cluster Admin API)
 
 ```bash
+make list_zones
+```
+
+(Since this uses the Cluster Admin API, it fails with a service
+account, so use `USE_APP_DEFAULT=True`.)
+
+To do the same, but with the low-level API:
+
+```bash
 make list_zones_low_level
 ```
 
