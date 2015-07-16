@@ -23,21 +23,27 @@ STUB_FACTORY = (bigtable_cluster_service_pb2.
                 early_adopter_create_BigtableClusterService_stub)
 
 
-stub = STUB_FACTORY(HOST, PORT,
-                    metadata_transformer=custom_metadata_transformer,
-                    secure=True,
-                    root_certificates=get_certs())
+def main():
+    """Main function for executing script."""
+    stub = STUB_FACTORY(HOST, PORT,
+                        metadata_transformer=custom_metadata_transformer,
+                        secure=True,
+                        root_certificates=get_certs())
 
-project_name = 'projects/%s' % (PROJECT_ID,)
-request_pb = bigtable_cluster_service_messages_pb2.ListClustersRequest(
-    name=project_name)
-result_pb = None
-with stub:
-    response = stub.ListClusters.async(request_pb, TIMEOUT_SECONDS)
-    result_pb = response.result()
+    project_name = 'projects/%s' % (PROJECT_ID,)
+    request_pb = bigtable_cluster_service_messages_pb2.ListClustersRequest(
+        name=project_name)
+    result_pb = None
+    with stub:
+        response = stub.ListClusters.async(request_pb, TIMEOUT_SECONDS)
+        result_pb = response.result()
 
-print('result type:')
-print(type(result_pb).__name__)
-print('result:')
-print(json.dumps(protobuf_to_dict(result_pb),
-                 indent=2, sort_keys=True))
+    print('result type:')
+    print(type(result_pb).__name__)
+    print('result:')
+    print(json.dumps(protobuf_to_dict(result_pb),
+                     indent=2, sort_keys=True))
+
+
+if __name__ == '__main__':
+    main()

@@ -25,22 +25,28 @@ STUB_FACTORY = (bigtable_table_service_pb2.
                 early_adopter_create_BigtableTableService_stub)
 
 
-stub = STUB_FACTORY(HOST, PORT,
-                    metadata_transformer=custom_metadata_transformer,
-                    secure=True,
-                    root_certificates=get_certs())
+def main():
+    """Main function for executing script."""
+    stub = STUB_FACTORY(HOST, PORT,
+                        metadata_transformer=custom_metadata_transformer,
+                        secure=True,
+                        root_certificates=get_certs())
 
-table_name = 'projects/%s/zones/%s/clusters/%s' % (
-    PROJECT_ID, ZONE, CLUSTER)
-request_pb = bigtable_table_service_messages_pb2.ListTablesRequest(
-    name=table_name)
-result_pb = None
-with stub:
-    response = stub.ListTables.async(request_pb, TIMEOUT_SECONDS)
-    result_pb = response.result()
+    table_name = 'projects/%s/zones/%s/clusters/%s' % (
+        PROJECT_ID, ZONE, CLUSTER)
+    request_pb = bigtable_table_service_messages_pb2.ListTablesRequest(
+        name=table_name)
+    result_pb = None
+    with stub:
+        response = stub.ListTables.async(request_pb, TIMEOUT_SECONDS)
+        result_pb = response.result()
 
-print('result type:')
-print(type(result_pb).__name__)
-print('result:')
-print(json.dumps(protobuf_to_dict(result_pb),
-                 indent=2, sort_keys=True))
+    print('result type:')
+    print(type(result_pb).__name__)
+    print('result:')
+    print(json.dumps(protobuf_to_dict(result_pb),
+                     indent=2, sort_keys=True))
+
+
+if __name__ == '__main__':
+    main()
