@@ -1,4 +1,7 @@
+import os
+
 from google.protobuf import internal
+from oauth2client.client import GoogleCredentials
 from oauth2client.client import _get_application_default_credential_from_file
 
 from config import KEYFILE_PATH
@@ -7,6 +10,7 @@ from config import KEYFILE_PATH
 BASE_SCOPE = 'https://www.googleapis.com/auth/cloud-bigtable.data'
 TABLE_SCOPE = 'https://www.googleapis.com/auth/cloud-bigtable.admin'
 CLUSTER_SCOPE = 'https://www.googleapis.com/auth/cloud-bigtable.admin'
+CLOUD_PLATFORM_SCOPE = 'https://www.googleapis.com/auth/cloud-platform'
 SSL_CERT_FILE = '/etc/ssl/certs/ca-certificates.crt'
 PORT = 443
 TABLE_ADMIN_HOST = 'bigtabletableadmin.googleapis.com'
@@ -31,11 +35,17 @@ def protobuf_to_dict(pb_value):
 
 
 def _set_token():
-    credentials = _get_application_default_credential_from_file(
-        KEYFILE_PATH)
-    scoped_credentials = credentials.create_scoped(
-        [BASE_SCOPE, TABLE_SCOPE, CLUSTER_SCOPE])
-    access_token = scoped_credentials.get_access_token().access_token
+    if os.environ.has_key('USE_APP_DEFAULT'):
+        credentials = GoogleCredentials.get_application_default()
+        scoped_credentials = credentials.create_scoped(CLOUD_PLATFORM_SCOPE)
+        access_token = scoped_credentials.get_access_token().access_token
+    else:
+        credentials = _get_application_default_credential_from_file(
+            KEYFILE_PATH)
+        scoped_credentials = credentials.create_scoped(
+            [BASE_SCOPE, TABLE_SCOPE, CLUSTER_SCOPE])
+        access_token = scoped_credentials.get_access_token().access_token
+
     AuthInfo.ACCESS_TOKEN = access_token
 
 
