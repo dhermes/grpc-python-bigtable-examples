@@ -14,6 +14,7 @@ CLOUD_PLATFORM_SCOPE = 'https://www.googleapis.com/auth/cloud-platform'
 SSL_CERT_FILE = '/etc/ssl/certs/ca-certificates.crt'
 PORT = 443
 TABLE_ADMIN_HOST = 'bigtabletableadmin.googleapis.com'
+CLUSTER_ADMIN_HOST = 'bigtableclusteradmin.googleapis.com'
 
 
 class AuthInfo(object):
