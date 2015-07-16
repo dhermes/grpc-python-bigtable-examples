@@ -1,3 +1,4 @@
+import json
 import os
 
 from oauth2client.client import _get_application_default_credential_from_file
@@ -9,6 +10,7 @@ from config import PROJECT_ID
 from config import KEYFILE_PATH
 from config import ZONE
 from config import CLUSTER
+from util import protobuf_to_dict
 
 
 STUB_CLASS = (bigtable_table_service_pb2.
@@ -52,5 +54,6 @@ with stub:
     response = stub.ListTables.async(request_pb, TIMEOUT_SECONDS)
     result_pb = response.result()
 
-print('repr(result_pb):')
-print(repr(result_pb))
+print('result:')
+print(json.dumps(protobuf_to_dict(result_pb),
+                 indent=2, sort_keys=True))
