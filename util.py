@@ -35,19 +35,25 @@ def protobuf_to_dict(pb_value):
     return result
 
 
+def print_debug_info(value):
+    if not os.environ.has_key('VERBOSE'):
+        return
+    print('==DEBUG INFO: %s' % (value,))
+
+
 def _set_token():
     if os.environ.has_key('USE_APP_DEFAULT'):
+        print_debug_info('Setting token from Application Default Credentials')
         credentials = GoogleCredentials.get_application_default()
         scoped_credentials = credentials.create_scoped(CLOUD_PLATFORM_SCOPE)
-        access_token = scoped_credentials.get_access_token().access_token
     else:
+        print_debug_info('Setting token from Service Account Credentials')
         credentials = _get_application_default_credential_from_file(
             KEYFILE_PATH)
         scoped_credentials = credentials.create_scoped(
             [BASE_SCOPE, TABLE_SCOPE, CLUSTER_SCOPE])
-        access_token = scoped_credentials.get_access_token().access_token
 
-    AuthInfo.ACCESS_TOKEN = access_token
+    AuthInfo.ACCESS_TOKEN = scoped_credentials.get_access_token().access_token
 
 
 def set_token(reset=False):

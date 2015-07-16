@@ -1,6 +1,10 @@
 BREW_PREFIX=$(shell brew --prefix)
 LD_LIBRARY_PATH=$(BREW_PREFIX)/lib
 PYTHONPATH=gcloud-python-bigtable
+ifneq ($(VERBOSE),)
+	GRPC_TRACE=surface,batch
+	export GRPC_TRACE
+endif
 
 help:
 	@echo 'Makefile for Python BigTable sample                                       '
@@ -12,6 +16,9 @@ help:
 	@echo 'NOTE: Append USE_APP_DEFAULT=True to the end of your make command to      '
 	@echo '      switch from a service account to a user account (via the application'
 	@echo '      default credentials).                                               '
+	@echo '                                                                          '
+	@echo 'NOTE: Append VERBOSE=True to the end of your make command to log more     '
+	@echo '      output from your examples.                                          '
 
 install:
 	[ -d gcloud-python-bigtable ] || git clone https://github.com/dhermes/gcloud-python-bigtable
