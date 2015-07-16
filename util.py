@@ -11,6 +11,7 @@ from oauth2client.client import _get_application_default_credential_from_file
 
 from gcloud_bigtable._generated import bigtable_cluster_service_messages_pb2
 from gcloud_bigtable._generated import bigtable_cluster_service_pb2
+from gcloud_bigtable._generated import bigtable_table_service_messages_pb2
 from gcloud_bigtable._generated import bigtable_table_service_pb2
 
 from config import KEYFILE_PATH
@@ -166,24 +167,31 @@ def make_table_stub():
         root_certificates=get_certs())
 
 
-def make_cluster_request(method, project_id=PROJECT_ID,
-                         timeout_seconds=TIMEOUT_SECONDS):
-    """Make a gRPC request for ``method`` to the Cluster Admin API."""
+def _make_api_request(method, messages_module, make_stub_method,
+                      request_name, timeout_seconds):
+    """Make a gRPC request for ``method`` to a service."""
     request_attr = '%sRequest' % (method,)
     request_pb_class = getattr(
-        bigtable_cluster_service_messages_pb2,
+        messages_module,
         request_attr)
 
-    project_name = 'projects/%s' % (project_id,)
-    request_pb = request_pb_class(name=project_name)
+    request_pb = request_pb_class(name=request_name)
     result_pb = None
 
-    with make_cluster_stub() as stub:
+    with make_stub_method() as stub:
         request_obj = getattr(stub, method)
         response = request_obj.async(request_pb, timeout_seconds)
         result_pb = response.result()
 
     return result_pb
+
+
+def make_cluster_request(method, project_id=PROJECT_ID,
+                         timeout_seconds=TIMEOUT_SECONDS):
+    """Make a gRPC request for ``method`` to the Cluster Admin API."""
+    project_name = 'projects/%s' % (project_id,)
+    return _make_api_request(method, bigtable_cluster_service_messages_pb2,
+                             make_cluster_stub, project_name, timeout_seconds)
 
 
 def pretty_print_cluster_result(method, project_id=PROJECT_ID,
