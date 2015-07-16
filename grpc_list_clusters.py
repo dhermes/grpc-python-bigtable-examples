@@ -7,25 +7,13 @@ from __future__ import print_function
 
 import json
 
-from gcloud_bigtable._generated import bigtable_cluster_service_messages_pb2
-
-from config import PROJECT_ID
-from config import TIMEOUT_SECONDS
-from util import make_cluster_stub
+from util import make_cluster_request
 from util import protobuf_to_dict
 
 
 def main():
     """Main function for executing script."""
-    stub = make_cluster_stub()
-    project_name = 'projects/%s' % (PROJECT_ID,)
-    request_pb = bigtable_cluster_service_messages_pb2.ListClustersRequest(
-        name=project_name)
-    result_pb = None
-    with stub:
-        response = stub.ListClusters.async(request_pb, TIMEOUT_SECONDS)
-        result_pb = response.result()
-
+    result_pb = make_cluster_request('ListClusters')
     print('result type:')
     print(type(result_pb).__name__)
     print('result:')

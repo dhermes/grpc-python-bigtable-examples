@@ -8,10 +8,13 @@ from google.protobuf import internal
 from oauth2client.client import GoogleCredentials
 from oauth2client.client import _get_application_default_credential_from_file
 
+from gcloud_bigtable._generated import bigtable_cluster_service_messages_pb2
 from gcloud_bigtable._generated import bigtable_cluster_service_pb2
 from gcloud_bigtable._generated import bigtable_table_service_pb2
 
 from config import KEYFILE_PATH
+from config import PROJECT_ID
+from config import TIMEOUT_SECONDS
 
 
 BASE_SCOPE = 'https://www.googleapis.com/auth/cloud-bigtable.data'
@@ -160,3 +163,23 @@ def make_table_stub():
         metadata_transformer=custom_metadata_transformer,
         secure=True,
         root_certificates=get_certs())
+
+
+def make_cluster_request(method, project_id=PROJECT_ID,
+                         timeout_seconds=TIMEOUT_SECONDS):
+    """Make a gRPC request for ``method`` to the Cluster Admin API."""
+    request_attr = '%sRequest' % (method,)
+    request_pb_class = getattr(
+        bigtable_cluster_service_messages_pb2,
+        request_attr)
+
+    project_name = 'projects/%s' % (project_id,)
+    request_pb = request_pb_class(name=project_name)
+    result_pb = None
+
+    with make_cluster_stub() as stub:
+        request_obj = getattr(stub, method)
+        response = request_obj.async(request_pb, timeout_seconds)
+        result_pb = response.result()
+
+    return result_pb
