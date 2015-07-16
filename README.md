@@ -85,7 +85,7 @@ grpc.framework.alpha.exceptions.ExpirationError
 ```
 
 When [running][9] the same request with the gRPC golang client (via
-`make run_cluster` in that gist), the error produced is
+`make list_clusters` in that gist), the error produced is
 
 ```
 2015/07/16 11:07:56 rpc error: code = 7 desc = "Project has not enabled the API. Please use Google Developers Console to activate the API for your project."
