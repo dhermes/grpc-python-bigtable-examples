@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+import json
 import os
 
 from google.protobuf import internal
@@ -183,3 +184,15 @@ def make_cluster_request(method, project_id=PROJECT_ID,
         result_pb = response.result()
 
     return result_pb
+
+
+def pretty_print_cluster_result(method, project_id=PROJECT_ID,
+                                timeout_seconds=TIMEOUT_SECONDS):
+    """Pretty print a gRPC response for ``method`` to the Cluster Admin API."""
+    result_pb = make_cluster_request(method, project_id=project_id,
+                                     timeout_seconds=timeout_seconds)
+    print('result type:')
+    print(type(result_pb).__name__)
+    print('result:')
+    print(json.dumps(protobuf_to_dict(result_pb),
+                     indent=2, sort_keys=True))
