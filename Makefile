@@ -47,4 +47,4 @@ list_zones_low_level: _python_deps
 list_tables: _python_deps
 	python grpc_list_tables.py
 
-.PHONY: _install_core _install_grpc_py _python_deps list_clusters list_zones_low_level list_tables
+.PHONY: _install_core _install_grpc_py _python_deps list_clusters list_zones list_zones_low_level list_tables
