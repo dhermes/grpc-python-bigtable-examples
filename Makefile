@@ -1,5 +1,6 @@
 BREW_PREFIX=$(shell brew --prefix)
 LD_LIBRARY_PATH=$(BREW_PREFIX)/lib
+export LD_LIBRARY_PATH
 PYTHONPATH=gcloud-python-bigtable
 ifneq ($(VERBOSE),)
 	GRPC_TRACE=surface,batch
@@ -9,11 +10,12 @@ endif
 help:
 	@echo 'Makefile for Python BigTable sample                                       '
 	@echo '                                                                          '
-	@echo '   make _install_core       Install core gRPC library                     '
-	@echo '   make _install_grpc_py    Install Python gRPC library                   '
-	@echo '   make _python_deps        Install the Python dependencies               '
-	@echo '   make run_cluster         Run example for Cluster Admin API             '
-	@echo '   make run_table           Run example for Table Admin API               '
+	@echo '   make _install_core           Install core gRPC library                 '
+	@echo '   make _install_grpc_py        Install Python gRPC library               '
+	@echo '   make _python_deps            Install the Python dependencies           '
+	@echo '   make run_cluster             Run example for Cluster Admin API         '
+	@echo '   make run_cluster_low_level   Run low-level example for Cluster API     '
+	@echo '   make run_table               Run example for Table Admin API           '
 	@echo '                                                                          '
 	@echo 'NOTE: Append USE_APP_DEFAULT=True to the end of your make command to      '
 	@echo '      switch from a service account to a user account (via the application'
@@ -35,7 +37,10 @@ _python_deps:
 run_cluster: _python_deps
 	python grpc_list_clusters.py
 
+run_cluster_low_level: _python_deps
+	python grpc_low_level_list_zones.py
+
 run_table: _python_deps
 	python grpc_list_tables.py
 
-.PHONY: _install_core _install_grpc_py _python_deps run_cluster run_table
+.PHONY: _install_core _install_grpc_py _python_deps run_cluster run_cluster_low_level run_table
