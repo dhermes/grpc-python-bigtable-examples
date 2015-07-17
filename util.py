@@ -17,6 +17,7 @@ from gcloud_bigtable._generated import bigtable_table_service_pb2
 from config import CLUSTER
 from config import KEYFILE_PATH
 from config import PROJECT_ID
+from config import SSL_CERT_FILE
 from config import TIMEOUT_SECONDS
 from config import ZONE
 
@@ -25,7 +26,6 @@ BASE_SCOPE = 'https://www.googleapis.com/auth/cloud-bigtable.data'
 TABLE_SCOPE = 'https://www.googleapis.com/auth/cloud-bigtable.admin'
 CLUSTER_SCOPE = 'https://www.googleapis.com/auth/cloud-bigtable.admin'
 CLOUD_PLATFORM_SCOPE = 'https://www.googleapis.com/auth/cloud-platform'
-SSL_CERT_FILE = '/etc/ssl/certs/ca-certificates.crt'
 PORT = 443
 TABLE_ADMIN_HOST = 'bigtabletableadmin.googleapis.com'
 CLUSTER_ADMIN_HOST = 'bigtableclusteradmin.googleapis.com'
