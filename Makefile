@@ -14,6 +14,7 @@ help:
 	@echo '   make _install_grpc_py        Install Python gRPC library               '
 	@echo '   make _python_deps            Install the Python dependencies           '
 	@echo '   make list_clusters           Use Cluster Admin API to list clusters    '
+	@echo '   make create_cluster          Cluster Admin API: Create new cluster     '
 	@echo '   make list_zones              Use Cluster Admin API to list zones       '
 	@echo '   make list_zones_low_level    Same as `list_zones`, using low-level API '
 	@echo '   make list_tables             Use Table Admin API to list tables        '
@@ -38,6 +39,9 @@ _python_deps:
 list_clusters: _python_deps
 	python grpc_list_clusters.py
 
+create_cluster: _python_deps
+	python grpc_create_cluster.py
+
 list_zones: _python_deps
 	python grpc_list_zones.py
 
@@ -47,4 +51,4 @@ list_zones_low_level: _python_deps
 list_tables: _python_deps
 	python grpc_list_tables.py
 
-.PHONY: _install_core _install_grpc_py _python_deps list_clusters list_zones list_zones_low_level list_tables
+.PHONY: _install_core _install_grpc_py _python_deps list_clusters create_cluster list_zones list_zones_low_level list_tables

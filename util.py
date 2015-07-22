@@ -171,16 +171,17 @@ def make_table_stub():
 
 def _make_api_request(method, messages_module, make_stub_method,
                       request_name, timeout_seconds,
-                      pretty_print=False):
+                      pretty_print=False, request_pb=None):
     """Make a gRPC request for ``method`` to a service."""
-    request_attr = '%sRequest' % (method,)
-    request_pb_class = getattr(
-        messages_module,
-        request_attr)
+    if request_pb is None:
+        request_attr = '%sRequest' % (method,)
+        request_pb_class = getattr(
+            messages_module,
+            request_attr)
 
-    request_pb = request_pb_class(name=request_name)
+        request_pb = request_pb_class(name=request_name)
+
     result_pb = None
-
     with make_stub_method() as stub:
         request_obj = getattr(stub, method)
         response = request_obj.async(request_pb, timeout_seconds)
@@ -193,12 +194,12 @@ def _make_api_request(method, messages_module, make_stub_method,
 
 def make_cluster_request(method, project_id=PROJECT_ID,
                          timeout_seconds=TIMEOUT_SECONDS,
-                         pretty_print=False):
+                         pretty_print=False, request_pb=None):
     """Make a gRPC request for ``method`` to the Cluster Admin API."""
     project_name = 'projects/%s' % (project_id,)
     return _make_api_request(method, bigtable_cluster_service_messages_pb2,
                              make_cluster_stub, project_name, timeout_seconds,
-                             pretty_print=pretty_print)
+                             pretty_print=pretty_print, request_pb=request_pb)
 
 
 def make_table_request(method, project_id=PROJECT_ID, zone=ZONE,
