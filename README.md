@@ -210,6 +210,10 @@ pulls this from `config.py.sample`
         requests to timeout after inactivity. The default value (`10`)
         should be sufficient.
 
+## Note
+
+This was previously a [gist][12] and has been updated here.
+
 [1]: https://console.developers.google.com/
 [2]: http://brew.sh/
 [3]: https://github.com/Homebrew/linuxbrew#install-linuxbrew-tldr
@@ -221,3 +225,4 @@ pulls this from `config.py.sample`
 [9]: https://gist.github.com/dhermes/d27070c90a9862213a3b
 [10]: https://github.com/GoogleCloudPlatform/gcloud-python/issues/872#issuecomment-121793405
 [11]: https://github.com/nathanielmanistaatgoogle
+[12]: https://gist.github.com/dhermes/2edb97d9581b5ec471eb
