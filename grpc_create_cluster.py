@@ -3,6 +3,8 @@
 In this script, we use the Cluster Admin API to list clusters.
 """
 
+from __future__ import print_function
+
 from gcloud_bigtable._generated import bigtable_cluster_data_pb2 as data_pb2
 from gcloud_bigtable._generated import (
     bigtable_cluster_service_messages_pb2 as messages_pb2)
@@ -23,8 +25,9 @@ def main():
         cluster_id=CLUSTER,
         cluster=cluster,
     )
-    make_cluster_request('CreateCluster', pretty_print=True,
-                         request_pb=request_pb)
+    result_pb = make_cluster_request('CreateCluster',
+                                     request_pb=request_pb)
+    print(result_pb)
 
 
 if __name__ == '__main__':
